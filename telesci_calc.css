@@ -10,12 +10,13 @@ body {
 }
 
 #calc_container {
-  width: max-content;
-  margin-left: auto;
-  margin-right: auto;
-  height: max-content;
-  margin-top: auto;
-  margin-bottom: auto;
+  height: max-content; 
+  position: absolute;
+  top:0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
 }
 
 .input_container {
