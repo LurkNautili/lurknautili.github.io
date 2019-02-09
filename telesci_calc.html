@@ -1,0 +1,86 @@
+<html>
+  <head>
+      <script
+      src="https://code.jquery.com/jquery-3.3.1.min.js"
+      integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+      crossorigin="anonymous"></script>
+      <style src="/telesci_calc.css" type="text/css"></style>
+  </head>
+  <body>
+    <canvas id='telescience_tool' width='765' height='765'></canvas>
+    <div style='display:none;'>
+      <img id='mapimg_z1' src='https://affectedarc07.github.io/SS13WebMap/Paradise/Cyberiad/cyberiad-1.png'
+           width='8160' height='8160'>
+      <img id='mapimg_z3' src='https://affectedarc07.co.uk/CDN/Public/z3-1.png'
+           width='8160' height='8160'>
+      <img id='mapimg_z4' src='https://affectedarc07.co.uk/CDN/Public/z4-1.png'
+           width='8160' height='8160'>
+      <img id='mapimg_z5' src='https://affectedarc07.co.uk/CDN/Public/z5-1.png'
+           width='8160' height='8160'>
+      <img id='mapimg_z6' src='https://affectedarc07.co.uk/CDN/Public/z6-1.png'
+           width='8160' height='8160'>
+    </div>
+    <div class='input_container' style='width: 500px;'>
+      <span class='input_lable'>bearing:</span>
+      <input id='bearing' class='output_box narrow' value='0'>
+      <span class='input_lable'>elevation:</span>
+      <input id='elevation' class='output_box narrow' value='0'>
+      <span class='input_lable'>power:</span>
+      <input id='power' class='output_box narrow' value='0'>
+    </div>
+    <div class='input_container'>
+      <span class='input_wrapper'>
+        <span class='centered_flow bold' style='color:peru;'>[source]&nbsp</span>
+        <span class='input_lable centered_flow'>x:</span>
+        <input id='source_x' class='input_box narrow' value='113'>
+        <span class='input_lable centered_flow'>y:</span>
+        <input id='source_y' class='input_box narrow' value='136'>
+        <span class='input_lable centered_flow'>z:</span>
+        <input id='source_z' class='input_box narrow' value='1'>
+      </span>
+      <span class='input_wrapper'  style='margin-left: 30px;'>
+        <span class='centered_flow bold' style='color:greenyellow;'>
+          [target]&nbsp
+        </span>
+        <span class='input_lable centered_flow'>x:</span>
+        <input id='target_x' class='input_box narrow' value='125'>
+        <span class='input_lable centered_flow'>y:</span>
+        <input id='target_y' class='input_box narrow' value='117'>
+        <span class='input_lable centered_flow'>z:</span>
+        <input id='target_z' class='input_box narrow' value='1'>
+      </span>
+    </div>
+    <div class='input_container'>
+      <span class='input_lable bold' style='color:aquamarine;'>[landed at]:&nbsp</span>
+      <span class='input_lable centered_text'>x:</span>
+      <input id='result_x' class='input_box narrow' value='0'>
+      <span class='input_lable centered_text'>y:</span>
+      <input id='result_y' class='input_box narrow' value='0'>
+      <span class='input_lable centered_text'>z:</span>
+      <input id='result_z' class='input_box narrow' value='1'>
+      <input type='button' id='calibrate' style='margin:0px 20px;' value='Calibrate!'>
+      <input type='button' id='toggleOverrideDisp' style='margin:0px 10px;' value='Manual settings'>
+      <div id='override_hider' style='display: none;'>
+        <span class='input_lable centered_text'>bear:</span>
+        <input id='bearing_override' class='input_box narrow' value='0'>
+        <span class='input_lable centered_text'>pow:</span>
+        <input id='power_override' class='input_box narrow' value='0'>
+        <input type='button' id='acceptOverrides' style='margin:0px 10px;' value='SET'>
+      </div>
+    </div>
+    <div class='centered_text output_data'>
+      <span>Distance: </span>
+      <span id='distance'>0</span><span> squares</span>
+      <span class='padded_separator'>|</span>
+      <span>Bearing offset: </span>
+      <span id='bearing_offset'>0</span><span>&deg</span>
+      <span class='padded_separator'>|</span>
+      <span>Power offset: </span>
+      <span id='power_offset'>0</span>
+    </div>
+    <div class='centered_text' style='display:none'>
+      <span>dbg: </span>0<span id='debug_output'></span>
+    </div>
+    <script src="/telesci_calc.js"></script>
+  </body>
+</html>

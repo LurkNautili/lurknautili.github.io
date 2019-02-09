@@ -1,0 +1,72 @@
+body {
+  background-color: #20262e;
+  color: white;
+}
+
+.input_container {
+  position: relative;
+  display: flex;
+  width: 765px;
+  padding: 5px;
+  vertical-align: middle;
+  /*background-color: #555555;*/
+}
+
+.input_wrapper {
+  flex: 0 0 auto;
+}
+
+.input_lable {
+  margin: 0;
+  padding: 0px 2px;
+  /*padding-top: 5px;*/
+  /*padding-bottom: 5px;*/
+}
+
+.input_box {
+  /*flex: auto;*/
+  text-align: center;
+  margin: 2px;
+  width: 3em;
+  /*padding: 0px 5px;*/
+}
+
+.output_box {
+  flex: auto;
+  text-align: center;
+  margin: 2px;
+  width: 6em;
+  background-color: #161616;
+  color: lightgray;
+  border: none;
+  padding: 3px 0px;
+}
+
+.narrow {
+  width: 2em;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.output_data {
+  text-align: center;
+  width: 500px;
+}
+
+.centered_flow {
+  text-align: center;
+  padding-top: 1px;
+  padding-bottom: 1px;
+}
+
+.centered_block {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.padded_separator {
+  padding: 1px 5px;
+}
