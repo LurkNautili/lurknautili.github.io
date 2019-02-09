@@ -4,11 +4,13 @@ body {
 }
 
 #calc_container {
+  width: max-content;
   margin-left: auto;
   margin-right: auto;
 }
 
 #control_dashboard {
+  width: max-content;
   margin-left: auto;
   margin-right: auto;
 }
@@ -16,7 +18,7 @@ body {
 .input_container {
   position: relative;
   display: flex;
-  width: 765px;
+  /*width: 765px;*/
   padding: 5px;
   vertical-align: middle;
   /*background-color: #555555;*/
