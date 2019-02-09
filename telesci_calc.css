@@ -3,6 +3,16 @@ body {
   color: white;
 }
 
+#calc_container {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#control_dashboard {
+  margin-left: auto;
+  margin-right: auto;
+}
+
 .input_container {
   position: relative;
   display: flex;

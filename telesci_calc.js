@@ -67,6 +67,10 @@ globals.canvas_context.save();
 
 // Catch clicks and dragging on the canvas for updating coords
 $(document).contextmenu(function(e){e.preventDefault();})
+$(document).onload(() => {
+  drawMap();
+  drawSourceTarget();
+})
 $('canvas').mousedown(function(e) {
 	if (e.which == 1) {
   	globals.m_button = 'left';
