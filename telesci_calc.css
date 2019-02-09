@@ -3,16 +3,19 @@ body {
   color: white;
 }
 
-#calc_container {
+#calc_container, #control_dashboard {
   width: max-content;
   margin-left: auto;
   margin-right: auto;
 }
 
-#control_dashboard {
+#calc_container {
   width: max-content;
   margin-left: auto;
   margin-right: auto;
+  height: max-content;
+  margin-top: auto;
+  margin-bottom: auto;
 }
 
 .input_container {
