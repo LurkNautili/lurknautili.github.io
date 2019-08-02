@@ -51,9 +51,7 @@ class Game {
     this.context.fillStyle = '#222222';
     this.context.fillRect(0, 0, 1024, 1024);
     // display splash?
-    this.dbg.innerHTML = "poo";
-    console.log(this.canvas);
-    console.log(this.context);
+    this.dbg.innerHTML = "test output";
   }
 }
 
