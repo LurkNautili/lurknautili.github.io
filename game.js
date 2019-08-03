@@ -1,9 +1,9 @@
 class Box {
-  constructor(x = 0, y = 0, vel = new THREE.Vector2(), size = 40, angle = 0, color = new THREE.Color()) {
+  constructor(position = new THREE.Vector2(), size = 40, angle = 0, vel = new THREE.Vector2(), color = new THREE.Color()) {
     this.color = color;
     this.width = size;
     this.angle = angle;
-    this.center = new THREE.Vector2(x, y);
+    this.center = position;
     this.velocity = vel;
     this.ang_velocity = 0;
     this.mass = 1;
@@ -58,7 +58,7 @@ class Renderer {
   }
 
   toCanvasCoords(pos) {
-    return new THREE.Vector2(pos.x, -pos.y);
+    return new THREE.Vector2(pos.x + this.canvas.width * 0.5, -pos.y + this.canvas.height * 0.5);
   }
 
   draw() {
@@ -70,6 +70,7 @@ class Renderer {
       ctx.translate(p.x, p.y);
       ctx.rotate(b.angle);
       ctx.strokeStyle = b.color.getStyle();
+      ctx.lineWidth = 2.5;
       ctx.strokeRect(-b.width * 0.5, -b.width * 0.5, b.width * 0.5, b.width * 0.5);
       ctx.rotate(-b.angle);
       ctx.translate(-p.x, -p.y);
@@ -89,25 +90,34 @@ class Physics {
 }
 
 class Level {
-  constructor(name) {
+  constructor(name, callback) {
     var req = new XMLHttpRequest();
     req.open("GET", "/" + name);
     req.onreadystatechange = () => {
-      this.loadLevel(JSON.parse(req.responseText));
+      if (req.readyState == 4) {
+        if (req.status == 200) {
+          this.loadLevel(JSON.parse(req.responseText));
+          callback();
+        }
+        else {
+          game.setDebugMsg("Failed to load level \"" + name + "\"")
+        }
+      }
     }
     req.send();
   }
 
   loadLevel(obj) {
     console.log(obj);
+    for (let s of obj.static_geometry) {
+      game.boxes.push(new Box(new THREE.Vector2(s.position.x, s.position.y), s.size, s.angle, new THREE.Vector2(), new THREE.Color(0x20aa00)));
+    }
   }
 }
 
 class Game {
   constructor() {
     // bind event handlers?
-    //this.canvas = document.getElementById("game_canvas");
-    //this.context = this.canvas.getContext("2d");
     this.dbg = document.getElementById("debug_output");
 
     this.boxes = [];
@@ -118,20 +128,23 @@ class Game {
   }
 
   start() {
-    //this.context.fillStyle = '#222222';
-    //this.context.fillRect(0, 0, 1024, 1024);
     // display splash?
-    this.dbg.innerHTML = "test output";
+
     // wait for input?
 
     // load level?
-    this.level = new Level("level_one.json");
-
-    this.renderer.draw();
+    let loadedCallback = () => {
+      this.renderer.draw();
+    }
+    this.level = new Level("level_one.json", loadedCallback);
   }
 
   step() {
 
+  }
+
+  setDebugMsg(msg) {
+    this.dbg.innerHTML = msg;
   }
 }
 

@@ -1,3 +1,18 @@
 {
-  "data" : [1, 2, 3]
+  "static_geometry" : [
+    {
+      "position" : {
+        "x" : 0,
+        "y" : 0
+      },
+      "size" : 20,
+      "angle" : 1 
+    }
+  ],
+  "characters" : [
+
+  ],
+  "physics_objects" : [
+
+  ]
 }
