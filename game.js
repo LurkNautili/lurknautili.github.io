@@ -65,7 +65,7 @@ class Renderer {
     let ctx = this.context;
     ctx.fillStyle = '#222222';
     ctx.fillRect(0, 0, 1024, 1024);
-    for (let b of boxes) {
+    for (let b of this.boxes) {
       let p = this.toCanvasCoords(b.center);
       ctx.translate(p.x, p.y);
       ctx.rotate(b.angle);
