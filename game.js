@@ -1,61 +1,141 @@
-/* Very basic 2D vector implemenetation*/
-class Vector2 {
-	constructor(x=0, y=0) {
-  	this.x = x;
-    this.y = y;
+class Box {
+  constructor(x = 0, y = 0, vel = new THREE.Vector2(), size = 40, angle = 0, color = new THREE.Color()) {
+    this.color = color;
+    this.width = size;
+    this.angle = angle;
+    this.center = new THREE.Vector2(x, y);
+    this.velocity = vel;
+    this.ang_velocity = 0;
+    this.mass = 1;
+    this.inertial_moment = 1;
+    this.force_accumulator = [];
+    this.affected_by = []; // force types like "gravity"
   }
-  
-  dot(v) {
-  	return this.x * v.x + this.y * v.y;
+
+  applyForces(dt) {
+    let torque = 0;
+    let force = new THREE.Vector2();
+    for (let f of force_accumulator) {
+      let contrib = this.calcForceEffect(f.pos, f.dir);
+      torque += f.pos.clone().sub(this.center).cross(contrib.tangential);
+      force.add(contrib.radial);
+    }
+    let acceleration = force.divideScalar(this.mass).multiplyScalar(dt);
+    this.velocity.add(acceleration);
+    let ang_acceleration = torque / this.inertial_moment * dt;
+    this.ang_velocity += ang_acceleration;
   }
-  
-  normalize() {
-  	let l = this.length();
-    this.x /= l;
-    this.y /= l;
+
+  addForce(pos, dir) {
+    this.force_accumulator.push({pos: pos, dir : dir});
   }
-  
-  length() {
-  	return Math.sqrt(Math.pow(this.x, 2) + Math.pow(this.y, 2));
+
+  calcForceEffect(pos, f) {
+    let r = new THREE.Vector2().subVectors(this.center, pos);
+    let r_u = r.clone().normalize();
+    let f_u = f.clone().normalize();
+    let theta = Math.acos(r_u.dot(f_u));
+    let tan_dir = new THREE.Vector2(r_u.y, -r_u.x).multiplyScalar(f_u.cross(r_u));
+    let tangential = tan_dir.clone().multiplyScalar(f.length() * Math.cos(theta));
+    let radial = r_u.clone().multiplyScalar(f.length() * Math.sin(theta));
+    return {
+      radial : radial,
+      tangential : tangential
+    };
   }
-  
-  angleTo(v) {
-  	let lt = this.length();
-    let lv = v.length();
-    let dp = this.dot(v);
-    let cos_theta = dp / (lt * lv);
-    return Math.acos(cos_theta);
+
+  step(dt) {
+    this.center.add(this.velocity.clone().multiplyScalar(dt));
+    this.angle += this.ang_velocity * dt;
   }
-  
-  /* The only nonstandard function, gets offset from "north" clockwise */
-  bearing() {
-    // Like your basic unit circle angle from x, y
-    // Except clockwise from y-axis instead of anticlockwise from x-axis
-    // Simply swap x and y to accomplish that
-    // (handedness of coordinate axes and symmetry take care of it)
-    let bear = Math.atan2(this.x, this.y);
-    if (bear < 0) { bear = Math.PI * 2 + bear}
-    return bear;
+}
+
+class Renderer {
+  constructor(boxes) {
+    this.boxes = boxes;
+    this.canvas = document.getElementById("game_canvas");
+    this.context = this.canvas.getContext("2d");
+  }
+
+  toCanvasCoords(pos) {
+    return new THREE.Vector2(pos.x, -pos.y);
+  }
+
+  draw() {
+    let ctx = this.context;
+    ctx.fillStyle = '#222222';
+    ctx.fillRect(0, 0, 1024, 1024);
+    for (let b of boxes) {
+      let p = this.toCanvasCoords(b.center);
+      ctx.translate(p.x, p.y);
+      ctx.rotate(b.angle);
+      ctx.strokeStyle = b.color.getStyle();
+      ctx.strokeRect(-b.width * 0.5, -b.width * 0.5, b.width * 0.5, b.width * 0.5);
+      ctx.rotate(-b.angle);
+      ctx.translate(-p.x, -p.y);
+    }
+  }
+}
+
+class Physics {
+  constructor(boxes) {
+    this.boxes = boxes;
+    this.force_types = ["gravity", "contact", "input"];
+  }
+
+  gravity() {
+
+  }
+}
+
+class Level {
+  constructor(name) {
+    var req = new XMLHttpRequest();
+    req.open("GET", "/" + name);
+    req.onreadystatechange = () => {
+      this.loadLevel(JSON.parse(clientInformation.responseText));
+    }
+  }
+
+  loadLevel(obj) {
+    console.log(obj);
   }
 }
 
 class Game {
   constructor() {
     // bind event handlers?
-    this.canvas = document.getElementById("game_canvas");
-    this.context = this.canvas.getContext("2d");
+    //this.canvas = document.getElementById("game_canvas");
+    //this.context = this.canvas.getContext("2d");
     this.dbg = document.getElementById("debug_output");
+
+    this.boxes = [];
+    
+    this.physics = new Physics(boxes);
+    this.renderer = new Renderer(boxes);
+    this.level = null; // do I need this?
   }
 
   start() {
-    this.context.fillStyle = '#222222';
-    this.context.fillRect(0, 0, 1024, 1024);
+    //this.context.fillStyle = '#222222';
+    //this.context.fillRect(0, 0, 1024, 1024);
     // display splash?
     this.dbg.innerHTML = "test output";
+    // wait for input?
+
+    // load level?
+    this.level = new Level("level_one.json");
+
+    this.renderer.draw();
+  }
+
+  step() {
+
   }
 }
 
+var game = null;
 window.addEventListener("load", (e) => {
-  var game = new Game();
+  game = new Game();
   game.start();
 });
