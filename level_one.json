@@ -2,15 +2,6 @@
   "static_geometry" : [
     {
       "position" : {
-        "x" : 0,
-        "y" : 0
-      },
-      "size" : 20,
-      "angle" : 1,
-      "color" : "rgb(40, 220, 0)"
-    },
-    {
-      "position" : {
         "x" : -480,
         "y" : -480
       },
