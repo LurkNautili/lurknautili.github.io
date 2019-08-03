@@ -55,13 +55,22 @@ class Renderer {
     this.boxes = boxes;
     this.canvas = document.getElementById("game_canvas");
     this.context = this.canvas.getContext("2d");
+    this.raf = null;
+    this.time = 0;
+    this.fps = 0;
+    this.fps_display_unflickerer = 0;
   }
 
   toCanvasCoords(pos) {
     return new THREE.Vector2(pos.x + this.canvas.width * 0.5, -pos.y + this.canvas.height * 0.5);
   }
 
-  draw() {
+  start() {
+    window.requestAnimationFrame(this.draw.bind(this));
+  }
+
+  draw(t) {
+    this.raf = null; // for pausing the rendering if necessary
     let ctx = this.context;
     ctx.fillStyle = '#222222';
     ctx.fillRect(0, 0, 1024, 1024);
@@ -75,6 +84,24 @@ class Renderer {
       ctx.rotate(-b.angle);
       ctx.translate(-p.x, -p.y);
     }
+    let frametime = t - this.time;
+    this.time = t;
+    this.drawFrameCounter(frametime, this.fps_display_unflickerer === 0);
+    this.fps_display_unflickerer = (this.fps_display_unflickerer + 1) % 20;
+    if (this.raf !== null) {
+      return;
+    }
+    this.raf = window.requestAnimationFrame(this.draw.bind(this));
+  }
+
+  drawFrameCounter(frametime, update) {
+    if (update) {
+      this.fps = Math.floor(1000/frametime);
+    }
+    let ctx = this.context;
+    ctx.fillStyle = 'green';
+    ctx.font = '24px sans-serif';
+    ctx.fillText(this.fps, 0, 25);
   }
 }
 
@@ -82,9 +109,41 @@ class Physics {
   constructor(boxes) {
     this.boxes = boxes;
     this.force_types = ["gravity", "contact", "input"];
+    this.drag = 0.1;
+    this.friction = 0.1; // probably beyond the scope of this jam
+    this.restitution_coeff = 0.9;
+    this.start_time = Date.now();
+    this.curr_time = this.start_time;
   }
 
-  gravity() {
+  start() {
+    setInterval(this.step, 1);
+  }
+
+  step() {
+    let new_time = Date.now();
+    let dt = new_time - this.curr_time;
+    // apply forces
+    // move objects
+    // check for and resolve intersections/collisions
+
+    // lastly
+    this.curr_time = Date.now();
+  }
+
+  checkIntersections() {
+
+  }
+
+  applyGravity() {
+
+  }
+
+  applyDrag() {
+
+  }
+
+  applyFriction() {
 
   }
 }
@@ -118,7 +177,7 @@ class Level {
 class Game {
   constructor() {
     // bind event handlers?
-    this.dbg = document.getElementById("debug_output");
+    this.dbg = document.getElementById("debug_text");
 
     this.boxes = [];
     
@@ -134,7 +193,37 @@ class Game {
 
     // load level?
     let loadedCallback = () => {
-      this.renderer.draw();
+      this.setDebugMsg("Nothing to report");
+      this.physics.start();
+      this.renderer.start();
+      // All of the below seems kind of pointless (it's a toggle for pausing the game when not hovering mouse over canvas)
+      // Could be used for a better pause function later though
+      {
+      /*
+      this.renderer.canvas.addEventListener('mouseover', (function(e) {
+        if (this.renderer.raf !== null) {
+          return;
+        }
+        this.renderer.raf = window.requestAnimationFrame(this.renderer.draw.bind(this.renderer));
+        this.setDebugMsg("Game running");
+      }).bind(this));
+      let pause_game = (function(e) {
+        if (this.renderer.raf == null) {
+          return;
+        }
+        window.cancelAnimationFrame(this.renderer.raf);
+        this.renderer.raf = null;
+        this.setDebugMsg("Game paused");
+      }).bind(this);
+      this.renderer.canvas.addEventListener('mouseout', pause_game);
+      window.addEventListener('mousemove', (e) => {
+        let element = document.elementFromPoint(e.clientX, e.clientY);
+        if (element != this.renderer.canvas) {
+          pause_game();
+        }
+      });
+      */
+      }
     }
     this.level = new Level("level_one.json", loadedCallback);
   }
