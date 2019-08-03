@@ -111,8 +111,8 @@ class Game {
 
     this.boxes = [];
     
-    this.physics = new Physics(boxes);
-    this.renderer = new Renderer(boxes);
+    this.physics = new Physics(this.boxes);
+    this.renderer = new Renderer(this.boxes);
     this.level = null; // do I need this?
   }
 
