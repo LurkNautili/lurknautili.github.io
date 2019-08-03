@@ -64,6 +64,11 @@ class Renderer {
   toCanvasCoords(pos) {
     return new THREE.Vector2(pos.x + this.canvas.width * 0.5, -pos.y + this.canvas.height * 0.5);
   }
+  // x + w * 0.5 = nx   -y + h * 0.5 = ny
+  // x = nx - w * 0.5   y = h * 0.5 - nx
+  toGameCoords(pos) {
+    return new THREE.Vector2(pos.x - this.canvas.width * 0.5, this.canvas.height * 0.5 - pos.y);
+  }
 
   start() {
     window.requestAnimationFrame(this.draw.bind(this));
@@ -74,16 +79,36 @@ class Renderer {
     let ctx = this.context;
     ctx.fillStyle = '#222222';
     ctx.fillRect(0, 0, 1024, 1024);
+    /*ctx.beginPath();
+    ctx.moveTo(0, 512);
+    ctx.lineTo(1024, 512);
+    ctx.moveTo(512, 0);
+    ctx.lineTo(512, 1024);
+    ctx.stroke();*/
+    //*
     for (let b of this.boxes) {
-      let p = this.toCanvasCoords(b.center);
+      ctx.save();
+      let p = this.toCanvasCoords(b.center);//new THREE.Vector2(b.center.x - b.width * 0.5, b.center.y - b.width * 0.5));
       ctx.translate(p.x, p.y);
       ctx.rotate(b.angle);
       ctx.strokeStyle = b.color.getStyle();
       ctx.lineWidth = 2.5;
-      ctx.strokeRect(-b.width * 0.5, -b.width * 0.5, b.width * 0.5, b.width * 0.5);
-      ctx.rotate(-b.angle);
-      ctx.translate(-p.x, -p.y);
+      ctx.strokeRect(-b.width * 0.5, -b.width * 0.5, b.width, b.width);
+      //ctx.beginPath();
+      //ctx.ellipse(0, 0, b.width, b.width, 0, 0, 2 * Math.PI);
+      //ctx.stroke();
+      ctx.restore();
+      //ctx.rotate(-b.angle);
+      //ctx.translate(-p.x, -p.y);
     }
+    //*/
+    /*
+    ctx.save();
+    ctx.strokeStyle = "#808080";
+    ctx.translate(512 - 50, 512 - 50);
+    ctx.strokeRect(0, 0, 100, 100);
+    ctx.restore();
+    //*/
     let frametime = t - this.time;
     this.time = t;
     this.drawFrameCounter(frametime, this.fps_display_unflickerer === 0);
@@ -108,7 +133,7 @@ class Renderer {
 class Physics {
   constructor(boxes) {
     this.boxes = boxes;
-    this.force_types = ["gravity", "contact", "input"];
+    this.force_types = ["gravity", "normal", "input"];
     this.drag = 0.1;
     this.friction = 0.1; // probably beyond the scope of this jam
     this.restitution_coeff = 0.9;
@@ -126,6 +151,9 @@ class Physics {
     // apply forces
     // move objects
     // check for and resolve intersections/collisions
+    // -> walk back along velocity I guess? Do I want to just do the lazy way of pretending it bounced off and reflecting the velocity after projecting it back out of the surface?
+    // -> A better way would be to figure out the moments of impact for each detected collision and step backwards to the earliest one and handle the collision properly there
+    // -> How do I figure out the exact point of contact if I do things the lazy way?
 
     // lastly
     this.curr_time = Date.now();
@@ -135,16 +163,47 @@ class Physics {
 
   }
 
-  applyGravity() {
+  // alternative to separate types but might be problematic for forces that are context-dependent/situational like normal/contact forces and friction
+  applyForces() {
+    for (let type of force_types) {
+      for (let box of boxes) {
+        if (box.affected_by.includes(type)) {
 
+        }
+      }
+    }
+  }
+
+  applyGravity() {
+    for (let box of boxes) {
+      if (box.affected_by.includes("gravity")) {
+
+      }
+    }
   }
 
   applyDrag() {
+    for (let box of boxes) {
+      if (box.affected_by.includes("drag")) {
 
+      }
+    }
   }
 
   applyFriction() {
+    for (let box of boxes) {
+      if (box.affected_by.includes("friction")) {
 
+      }
+    }
+  }
+
+  applyNormalForce() {
+    for (let box of boxes) {
+      if (box.affected_by.includes("normal")) {
+
+      }
+    }
   }
 }
 
@@ -169,8 +228,44 @@ class Level {
   loadLevel(obj) {
     console.log(obj);
     for (let s of obj.static_geometry) {
-      game.boxes.push(new Box(new THREE.Vector2(s.position.x, s.position.y), s.size, s.angle, new THREE.Vector2(), new THREE.Color(0x20aa00)));
+      let x = typeof s.position.x === "undefined" ? 0 : s.position.x;
+      let y = typeof s.position.y === "undefined" ? 0 : s.position.y;
+      let size = typeof s.size === "undefined" ? 20 : s.size;
+      let angle = typeof s.angle === "undefined" ? 0 : s.angle;
+      let color = typeof s.color === "undefined" ? 0x808080 : s.color;
+      game.boxes.push(new Box(new THREE.Vector2(x, y), size, angle, new THREE.Vector2(), new THREE.Color(color)));
     }
+  }
+}
+
+class Character extends Box {
+  constructor(position) {
+    super(position, 35, 0, new THREE.Vector2(), new THREE.Color(0xffffff));
+    this.input_state = {
+      left : false,
+      right : false,
+      up : false,
+      down : false,
+      space : false
+    }
+
+    this.affected_by.concat(["gravity", "friction", "drag"]);
+  }
+
+  onKeyEvent(key, state) {
+    let map = {
+      "w" : "up",
+      "a" : "left",
+      "s" : "down",
+      "d" : "right",
+      "ArrowUp" : "up",
+      "ArrowLeft" : "left",
+      "ArrowDown" : "down",
+      "ArrowRight" : "right",
+      " " : "space"
+    }
+    this.input_state[map[key]] = state;
+    console.log(this.input_state);
   }
 }
 
@@ -183,6 +278,10 @@ class Game {
     
     this.physics = new Physics(this.boxes);
     this.renderer = new Renderer(this.boxes);
+
+    this.character = new Character(new THREE.Vector2(0, -420));
+    this.boxes.push(this.character);
+
     this.level = null; // do I need this?
   }
 
@@ -224,8 +323,22 @@ class Game {
       });
       */
       }
+
+      this.registerListeners();
     }
     this.level = new Level("level_one.json", loadedCallback);
+  }
+
+  onKeyEvent(key, down) {
+    let character_keys = ["w", "a", "s", "d", " ", "ArrowUp", "ArrowLeft", "ArrowDown", "ArrowRight"];
+    if (character_keys.includes(key)) {
+      this.character.onKeyEvent(key, down);
+    }
+  }
+
+  registerListeners() {
+    window.addEventListener("keydown", (e) => {if (e.repeat) return; else this.onKeyEvent(e.key, true);});
+    window.addEventListener("keyup", (e) => {if (e.repeat) return; else this.onKeyEvent(e.key, false);});
   }
 
   step() {
