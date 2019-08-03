@@ -93,7 +93,7 @@ class Level {
     var req = new XMLHttpRequest();
     req.open("GET", "/" + name);
     req.onreadystatechange = () => {
-      this.loadLevel(JSON.parse(clientInformation.responseText));
+      this.loadLevel(JSON.parse(req.responseText));
     }
     req.send();
   }
