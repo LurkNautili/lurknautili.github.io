@@ -95,6 +95,7 @@ class Level {
     req.onreadystatechange = () => {
       this.loadLevel(JSON.parse(clientInformation.responseText));
     }
+    req.send();
   }
 
   loadLevel(obj) {
