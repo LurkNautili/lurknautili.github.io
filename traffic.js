@@ -375,6 +375,14 @@ class Path extends SimObject {
       n.color = color;
     }
   }
+
+  length() {
+    let len_accumulator = 0;
+    for (let e of this.edges) {
+      len_accumulator += Math.sqrt(e.length_sq);
+    }
+    return len_accumulator;
+  }
 }
 
 class Graph extends SimObject {
@@ -483,9 +491,9 @@ class Graph extends SimObject {
           this.setActive(intersected_node);
         }
         else if (e.shiftKey) {
-          console.log("foo");
           let path = this.findPath(this.active_node, intersected_node);
           path.paintEdges("#6a3");
+          console.log(path.length());
           setTimeout(path.paintEdges.bind(path), 2000, SETTINGS.EDGE.DEFAULT_COLOR);
           this.active_node.deselect();
         }
