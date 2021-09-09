@@ -1,0 +1,11 @@
+---
+buttons:
+  - name: Welcome
+    url: /
+  - name: Projects
+    url: /projects.html
+  - name: About
+    url: /about.html
+  - name: Contact
+    url: /contact.html
+---

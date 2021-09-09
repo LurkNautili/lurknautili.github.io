@@ -1,0 +1,88 @@
+:root {
+  --site-background : #111;
+  --site-background2 : #151515;
+  --content-background : rgb(40, 41, 46);
+  --content-background-highligted : rgb(62, 64, 71);
+  --default-light-text : rgb(189, 185, 173);
+  --default-green-text : rgb(88, 136, 49);
+  --link-color : rgb(118, 145, 68);
+}
+
+html, body {
+  background-color : var(--site-background);
+  margin : 0;
+  height : 100%;
+  min-height : 100%;
+  // max-width : 75%;
+  width : max-content;
+  margin-left : auto;
+  margin-right : auto;
+}
+
+.page-content {
+  padding : 1px 3em 1em 3em;
+  min-height : 50%;
+  border-radius : 5px;
+  background-color : var(--content-background);
+  font-family : monospace;
+  color : var(--default-light-text);
+  box-shadow : 0 0 0.1em var(--default-light-text);
+}
+
+.vert-spacer {
+  height : 3em;
+}
+
+a {
+  color : var(--link-color);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  text-align : center;
+}
+
+h1 {
+  font-size : 2.5em;
+  text-shadow : black 0 0 0.1em, black 0 0 0.1em, black 0 0 0.1em, black 0 0 0.1em;
+}
+
+h2 {
+  font-size : 2em;
+}
+
+h3 {
+  font-size : 1.7em;
+}
+
+p, ul {
+  text-align : left;
+  font-size : 1.3em;
+  width : max-content;
+  margin : auto;
+}
+
+figure {
+  width : max-content;
+  margin : auto;
+  background-color : var(--site-background2);
+  text-align : center;
+}
+
+img, video {
+  max-width : 50em;
+}
+
+img:hover {
+  max-width : unset;
+}
+
+p {
+  margin-top : 1em;
+  margin-bottom : 1em;
+}
+
+p > br {
+  display : block;
+  content : " ";
+  margin : 0.1em 0em;
+}

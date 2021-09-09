@@ -1,0 +1,60 @@
+:root {
+  --navbar-background : #333;
+  --navbar-button-background : #444;
+}
+
+#navbar-container {
+  display : flex;
+  flex-direction : row;
+  max-width : max-content;
+  align-items : flex-end;
+  justify-content : flex-start;
+  margin : auto;
+  margin-top : 1em;
+  margin-bottom : 1em;
+}
+
+#navbar-image {
+  background-position : center center;
+  background-repeat : no-repeat;
+  background-size : cover;
+  max-width : 10em;
+  width : 10em;
+  height : 10em;
+  box-shadow : 0 0 0.1em var(--default-light-text);
+  border-radius : 5%;
+  margin : 0;
+  padding : 0;
+}
+
+.img-link {
+  display : flex;
+  flex : 1 1 auto;
+  margin-right : 0.2em;
+}
+
+#navbar {
+  display : flex;
+  flex-direction : row;
+  justify-content : space-around;
+  background-color : var(--site-background2);
+}
+
+.navbar-button {
+  flex : 1 1 auto;
+  text-decoration : none;
+  text-shadow : black 0 0 0.3em;
+  box-shadow : 0 0 0.07em var(--default-light-text);
+  padding : 0.2em 0.5em;
+  border-radius : 0.2em;
+  margin : 0.1em;
+  margin-left : 0.2em;
+  margin-bottom : 0;
+  color : var(--default-green-text);
+  background-color : var(--content-background);
+  font : bold 2em monospace;
+}
+
+.navbar-button.current {
+  background-color : var(--content-background-highligted);
+}

@@ -314,7 +314,7 @@ class Physics {
 class Level {
   constructor(name, callback) {
     var req = new XMLHttpRequest();
-    req.open("GET", "/" + name);
+    req.open("GET", name);
     req.onreadystatechange = () => {
       if (req.readyState == 4) {
         if (req.status == 200) {

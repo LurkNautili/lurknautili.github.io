@@ -1,0 +1,10 @@
+<div id="navbar-container">
+    <a class="img-link" href="/">
+    <img id="navbar-image" src="https://resources.lurknautili.io/LN_logo.png">
+    </a>
+    <nav id="navbar">
+    {% for item in site.data.navbar.buttons -%}
+    <a class="navbar-button {% if page.url == item.url -%}current{%- endif -%}" href="{{item.url}}">{{item.name}}</a>
+    {% endfor -%}
+    </nav>
+</div>

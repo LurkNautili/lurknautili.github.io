@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>{{page.title}}</title>
+    <link rel="stylesheet" href="/assets/css/styles.css">
+    <link rel="shortcut icon" href="/assets/img/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/assets/img/favicon.ico" type="image/x-icon">
+    <!-- <script src="script.js"></script> -->
+  </head>
+  <body>
+    {% assign btn = page.navbar_buttons -%}
+    {%- assign ind = page.navbar_html_indent -%}
+    {%- include navbar.html buttons=btn indent=ind %}
+    <div class="page-content">
+      {{ content }}
+    </div>
+  </body>
+</html>
