@@ -28,7 +28,7 @@ This is a GitHub Pages site, built using Jekyll. It's my first time using this t
 and basically the first home page I've ever bothered building. Hopefully it's not too ugly.  
 
 
-If you have feedback you can [contact me](/contact/) and I'll see what I can do.
+If you have feedback you can [contact me](/contact.html) and I'll see what I can do.
 
 
 To-do: adding some sort of simple form that submits to some service listening on my server.
