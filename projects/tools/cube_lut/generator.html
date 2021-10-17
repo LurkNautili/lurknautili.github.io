@@ -1,0 +1,44 @@
+<html>
+  <head>
+      <link rel="shortcut icon" href="/assets/img/favicon.ico" type="image/x-icon">
+      <link rel="icon" href="/assets/img/favicon.ico" type="image/x-icon">
+      <link href="generator.css" rel="stylesheet">
+  </head>
+  <body oncontextmenu="return false;">
+    <!--<span>Input color: <input type="color" id="input-color" value="#ff2200"></span>-->
+    <span>
+      Output color: 
+      <input type="color" id="output-color" value="#dd00dd">
+    </span>
+    <span>
+      <label for="resolution-select">Select resolution: </label>
+      <select id="resolution-select">
+        <option value="2">2</option>
+        <option value="4">4</option>
+        <option value="8">8</option>
+        <option value="16">16</option>
+        <option value="32" selected>32</option>
+        <option value="64">64</option>
+        <option value="128">128</option>
+        <option value="256">256</option>
+      </select>
+    </span>
+    <span>
+      <label for="resolution-grid-checkbox">Show resolution grid: </label>
+      <input type="checkbox" id="resolution-grid-checkbox" checked>
+    </span>
+    <span>
+      <label for="name-input">LUT name: </label>
+      <input type="text" id="name-input" value="TestLUT">
+    </span>
+    <span>
+      <input type="button" id="print-button" value="Download LUT">
+    </span>
+    <div class="canvas-container">
+      <canvas></canvas>
+      <input type="range" min="0" max="255" value="0" id="blue-slider" name="blueness" title="blueness">
+      <label for="blue-slider">Blueness</label>
+    </div>
+    <script src="generator.js"></script>
+  </body>
+</html>

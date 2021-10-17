@@ -1,0 +1,20 @@
+.canvas-container {
+  width : min-content;
+}
+
+.canvas-container input {
+  width : 100%;
+}
+
+body {
+  background-color : #555;
+  color : #eee;
+}
+
+body > * {
+  padding : 0em 2em 0em 0em;
+}
+
+body > .canvas-container {
+  padding : 0;
+}
