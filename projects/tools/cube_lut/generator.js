@@ -216,7 +216,7 @@ class ColorLattice {
     }
 
     print(name) {
-        let output = "TITLE " + name + "\n";
+        let output = "TITLE \"" + name + "\"\n";
         output += "\n#LUT size\nLUT_3D_SIZE " + this.size + "\n";
         output += "\n#LUT data points\n"
         for (let k = 0; k < this.size; ++k) {
