@@ -560,8 +560,6 @@ class ColorCanvas {
     onLayerChange() {
         // re-color control points
         this.blueness = Math.floor((this.layer / (this.resolution - 1)) * 255);
-        console.log("Layer " + this.layer);
-        console.log("Blueness " + this.blueness);
         this.color_lattice.rebuildControlPoints();
         // re-cache background
         this.updateBackground();
@@ -617,7 +615,6 @@ class ColorCanvas {
         // //let key = x << 16 | y << 8 | z >>> 0;
         // let key = this.computeMapKey(x, y, z);
         // this.selection_map.set(key, true);
-        // console.log(this.selection_map);
         let changed = this.color_lattice.onClick(e.offsetX, e.offsetY, e.which);
         if (changed) {
             this.updateBackground();
