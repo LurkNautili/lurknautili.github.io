@@ -11,10 +11,10 @@ I was messing around with implementing a Perlin noise generator based on the
 page on Wikipedia, and what I ended up with does work but could be improved upon.
 
 ### [.cube LUT generator tool](/projects/tools/cube_lut/generator.html)
-Couldn't figure out a way to override the colors on Twitch Studio's follower goal 
-widget easily (it's loaded as a web page from an origin I don't control) but the app
-supports applying color filters in the form of .cube LUTs so I wrote this to try 
-working around that limitation. It's a bit janky but technically does the job.
+Couldn't figure out a way to override the colors on Twitch Studio's follower goal  
+widget easily (it's loaded as a web page from an origin I don't control) but the app  
+supports applying color filters in the form of .cube LUTs so I wrote this to try  
+working around that limitation. It's a bit janky but technically does the job.  
 
 ### [Unfinished Game Jam Game](/projects/games/gmtk_only_one_jam/game.html)
 I started working on a game for an earlier GMTK game jam but got lost on the way.  
