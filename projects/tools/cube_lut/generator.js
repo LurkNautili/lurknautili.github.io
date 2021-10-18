@@ -112,7 +112,8 @@ class ColorLattice {
             else if (btn === 3) {
                 let sx = Math.floor((256 - 1) * (cp.ind.i / (this.size - 1)));
                 let sy = Math.floor((256 - 1) * (cp.ind.j / (this.size - 1)));
-                color = this.parent.getSourceColor(sx, sy, this.parent.layer);
+                let sz = Math.floor((256 - 1) * (this.parent.layer / (this.parent.resolution - 1)));
+                color = this.parent.getSourceColor(sx, sy, sz);
             }
             changed = this.setControlPointColor(cp, this.parent.layer, color);
         }
@@ -172,11 +173,12 @@ class ColorLattice {
                 else {
                     let sx = Math.floor((256 - 1) * (i / (size - 1)));
                     let sy = Math.floor((256 - 1) * (j / (size - 1)));
+                    let sz = Math.floor((256 - 1) * (this.parent.layer / (this.parent.resolution - 1)));
                     // getSourceColor uses the 256^3 raw colors of the source cube
                     // not sure if I should be sampling this cube or even store it in the first place
                     // since it's pretty easy to construct these color values on demand (it's just a cube with RGB axes)
                     // see buildInputCube (TODO maybe sort this out)
-                    color = this.parent.getSourceColor(sx, sy, this.parent.layer);
+                    color = this.parent.getSourceColor(sx, sy, sz);
                 }
                 // figure out the x and y coordinates of where this control point should be in image coords
                 // given that the corners of the lattice line up with the corners of the image
@@ -225,7 +227,7 @@ class ColorLattice {
                     let key = this.computeMapKey(i, j, k);
                     let color = 0;
                     if (this.colors.has(key)) {
-                        color = this.colors.get(this.computeMapKey(i, j, k));
+                        color = this.colors.get(key);
                     }
                     else {
                         let sx = Math.floor((256 - 1) * (i / (this.size - 1)));
@@ -265,7 +267,9 @@ class ColorCanvas {
 
         this.resolution_select = document.getElementById("resolution-select");
         this.resolution = parseInt(this.resolution_select.value, 10);
-        this.layer_slider.step = 255 / this.resolution;
+        this.layer_slider.min = 0;
+        this.layer_slider.max = 31;
+        this.layer_slider.step = 1;
 
         //let input_color_el = document.getElementById("input-color");
         this.output_color_el = document.getElementById("output-color");
@@ -523,8 +527,8 @@ class ColorCanvas {
         this.canvas.addEventListener("wheel", this.onWheel.bind(this), { passive : true });
         this.canvas.addEventListener("mouseup", this.onClick.bind(this));
 
-        this.layer_slider.addEventListener("input", (e) => { 
-            this.layer = parseInt(e.target.value, 10); 
+        this.layer_slider.addEventListener("input", (e) => {
+            this.layer = parseInt(e.target.value, 10);
             this.onLayerChange();
             //this.updateCanvas(); 
         });
@@ -555,6 +559,9 @@ class ColorCanvas {
 
     onLayerChange() {
         // re-color control points
+        this.blueness = Math.floor((this.layer / (this.resolution - 1)) * 255);
+        console.log("Layer " + this.layer);
+        console.log("Blueness " + this.blueness);
         this.color_lattice.rebuildControlPoints();
         // re-cache background
         this.updateBackground();
@@ -562,25 +569,27 @@ class ColorCanvas {
 
     onResolutionChange() {
         this.resolution = parseInt(this.resolution_select.value, 10);
-        this.layer_slider.step = 255 / this.resolution;
-        let old_layer = this.layer;
+        //this.layer_slider.step = 255 / (this.resolution - 1);
+        this.layer_slider.max = this.resolution - 1;
+        let old_blueness = this.blueness;
         this.layer = parseInt(this.layer_slider.value, 10);
-        let layer_changed = old_layer !== this.layer;
+        this.blueness = Math.floor((this.layer / (this.resolution - 1)) * 255);
+        let blueness_changed = old_blueness !== this.blueness;
         // rebuild control points entirely
         // they're no longer in the same positions so the whole XYZ lattice is invalidated
         // (not just the control points)
         // TODO: look into maybe re-interpreting the previous data in the new lattice to get an approximate equivalent?
         this.color_lattice.resize(this.resolution);
-        if (layer_changed) {
+        if (blueness_changed) {
             this.updateBackground();
         }
     }
 
     onWheel(e) {
         //let step = this.layer_slider.step;
-        let step = Math.floor(this.layer_slider.step)
+        let step = 1;//Math.floor(this.layer_slider.step)
         if (e.deltaY > 0) {
-            if (this.layer + step < 255) {
+            if (this.layer + step < this.resolution) {
                 this.layer = this.layer + step;
                 this.layer_slider.value = this.layer;
                 this.onLayerChange();
@@ -628,7 +637,14 @@ class ColorCanvas {
     }
 
     colorIntFromHexStr(str) {
-        return Number("0x" + str.slice(1));
+        let num = Number("0x" + str.slice(1));
+        // canvas uses reverse endianness (ABGR instead of RGBA)
+        let num_reversed = ( 255                      << 24 | // A
+                            (num & 0x0000ff)          << 16 | // B
+                           ((num & 0x00ff00) >>> 8)   << 8  | // G
+                           ((num & 0xff0000) >>> 16))         // R
+                           >>> 0;
+        return num_reversed;
     }
 
     interpColors(a, b, t) {
