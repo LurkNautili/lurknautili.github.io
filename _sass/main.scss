@@ -20,6 +20,9 @@ html, body {
 }
 
 .page-content {
+  width : max-content;
+  min-width : 50%;
+  max-width : 605px;
   padding : 1px 3em 1em 3em;
   min-height : 50%;
   border-radius : 5px;
@@ -57,23 +60,28 @@ h3 {
 p, ul {
   text-align : left;
   font-size : 1.3em;
-  width : max-content;
+  // width : max-content;
   margin : auto;
 }
 
 figure {
-  width : max-content;
+  // width : max-content;
   margin : auto;
   background-color : var(--site-background2);
   text-align : center;
 }
 
 img, video {
-  max-width : 50em;
+  max-width : 100%;
 }
 
-img:hover {
-  max-width : 100em;
+.viewing {
+  position : fixed;
+  top : 3rem;
+  left : 50%;
+  transform : translateX(-50%);
+  max-height : 100%;
+  max-width : 100%;
 }
 
 p {

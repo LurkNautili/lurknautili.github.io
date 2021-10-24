@@ -3,9 +3,9 @@ layout: default
 title: LurkNautili's Github front page
 ---
 # Get in touch
-You can get in touch if you want to offer feedback about my projects or this website,  
-or contact me about doing a game jam or asking for my input or help on a project, or  
-if you just want to offer a job of some kind (e.g. if you're from Google or whatever)  
+You can get in touch if you want to offer feedback about my projects or this website, 
+or contact me about doing a game jam or asking for my input or help on a project, or 
+if you just want to offer a job of some kind (e.g. if you're from Google or whatever)
 
 <div class="vert-spacer"></div>
 
