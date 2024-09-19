@@ -3,9 +3,9 @@ layout: default
 title: LurkNautili's Github front page
 ---
 # About me
-I'm a (at the time of writing) 29-year-old software developer, mostly using C++ and JS.
+I'm 32-year-old software developer, mostly using C++ and JS.
 
-I've also learned to use UE4 in the past couple of years. It was painful at first but, 
+I've also learned to use UE4 (and a bit of UE5 now) in the past couple of years. It was painful at first but, 
 now I think I've learned to appreciate the engine despite its idiosyncrasies.
  
 I'm building this site as a place to showcase projects and hopefully give me additional reasons 
@@ -26,6 +26,7 @@ the Culture series by Iain M. Banks, although Peter F. Hamilton and some others 
 # About this site
 This is a GitHub Pages site, built using Jekyll. It's my first time using this tech, 
 and basically the first home page I've ever bothered building. Hopefully it's not too ugly. 
+I'm thinking of upgrading this site to look a bit more modern and mainstream with Next.js and Tailwind and whatnot, but it's not a high priority for me.
 
 The source code for everything is on the [github.io repository](https://github.com/LurkNautili/lurknautili.github.io) corresponding to this page 
 and I've arranged it such that everything in that repository (I hosted images and other 

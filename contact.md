@@ -4,14 +4,14 @@ title: LurkNautili's Github front page
 ---
 # Get in touch
 You can get in touch if you want to offer feedback about my projects or this website, 
-or contact me about doing a game jam or asking for my input or help on a project, or 
-if you just want to offer a job of some kind (e.g. if you're from Google or whatever)
+contact me about doing a game jam, asking for my input or help on a project, or 
+if you want to reach out to offer a job or some other business related thing.
 
 <div class="vert-spacer"></div>
 
 # Contact Info
 - email: riku.lintula@tuta.io
-- Discord: LurkNautili#3246
+- Discord: LurkNautili
 
 <div class="vert-spacer"></div>
 
